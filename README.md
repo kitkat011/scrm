@@ -1,2 +1,2 @@
 # scrm
-tabangi mi
+tabangi ko
