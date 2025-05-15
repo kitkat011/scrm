@@ -124,7 +124,7 @@ namespace StudentClinicRecordManager
         static void SearchRecord()
         {
             Console.WriteLine("Search Name: ");
-            string name = Console.ReadLine();
+            string name = Console.ReadLine().ToLower();
             bool found = false;
 
             Console.WriteLine("\n--- Search Results ---");
@@ -141,13 +141,36 @@ namespace StudentClinicRecordManager
                 Console.WriteLine("No Records Found");
             }
         }
-            static void EditRecord()
+        static void EditRecord()
         {
+            Console.WriteLine("Enter name to edit: ");
+            string name = Console.ReadLine().ToLower();
 
+            for (int i = 0; i < records.Count; i++)
+            {
+                if (records[i].Name.ToLower().Contains(name))
+                {
+                    Console.WriteLine("Editing this record:");
+                    DisplayRecord(records[i]);
+                    StudentRecord temp = records[i];
+                    Console.Write("Enter new name: ");
+                    temp.Name = Console.ReadLine();
+                    Console.Write("Enter new age: ");
+                    temp.Age = int.Parse(Console.ReadLine());
+                    Console.Write("Enter new grade & course: ");
+                    temp.Grade = Console.ReadLine();
+                    Console.Write("Enter new complaint: ");
+                    temp.Complaint = Console.ReadLine();
+                    Console.Write("Enter new treatment: ");
+                    temp.Treatment = Console.ReadLine();
+                    records[i] = temp;
+                }
+                Console.WriteLine("Updated Successfully!");
+            }
         }
         static void DeleteRecord()
         {
-
+            
         }
         static void SortRecordbyName()
         {
@@ -195,7 +218,9 @@ namespace StudentClinicRecordManager
         }
         static void DisplayRecord(StudentRecord r)
         {
-            Console.WriteLine ($"Name:{r.Name},Age:{r.Age}, Grade: {r.Grade}");
+            Console.WriteLine($"Name: {r.Name}");
+            Console.WriteLine($"Age: {r.Age}");
+            Console.WriteLine($"Grade: {r.Grade}");
             Console.WriteLine($"Complaint: {r.Complaint}");
             Console.WriteLine($"Treatment: {r.Treatment}");
         }
