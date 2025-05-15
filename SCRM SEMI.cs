@@ -150,7 +150,7 @@ namespace StudentClinicRecordManager
             {
                 if (records[i].Name.ToLower().Contains(name))
                 {
-                    Console.WriteLine("Editing this record:");
+                    Console.WriteLine("Editing this record: ");
                     DisplayRecord(records[i]);
                     StudentRecord temp = records[i];
                     Console.Write("Enter new name: ");
@@ -170,7 +170,32 @@ namespace StudentClinicRecordManager
         }
         static void DeleteRecord()
         {
-            
+            Console.WriteLine("Enter name to delete: ");
+            string name = Console.ReadLine().ToLower();
+
+            for (int i = 0; i < records.Count; i++)
+            {
+                if (records[i].Name.ToLower().Contains(name))
+                {
+                    Console.WriteLine("Deleting this record");
+
+                    DisplayRecord(records[i]);
+                    Console.WriteLine("Are you sure you want to delete this record? (yes/no)");
+                    if (Console.ReadLine().ToLower() == "yes")
+                    {
+                        records.RemoveAt(i);
+                        Console.WriteLine("Record Deleted Successfully!");
+                    }
+                    else if (Console.ReadLine().ToLower() == "no")
+                    {
+                        Console.WriteLine("Deletion Cancelled.");
+                    }
+                    else 
+                    { 
+                        Console.WriteLine("Invalid choice. Please try again.");
+                    }
+                }
+            }
         }
         static void SortRecordbyName()
         {
@@ -226,4 +251,3 @@ namespace StudentClinicRecordManager
         }
     }
 }
-
