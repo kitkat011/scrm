@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
 
 namespace StudentClinicRecordManager
 {
@@ -120,13 +120,28 @@ namespace StudentClinicRecordManager
             {
                 DisplayRecord(r);
             }
-            }
         }
         static void SearchRecord()
         {
+            Console.WriteLine("Search Name: ");
+            string name = Console.ReadLine();
+            bool found = false;
 
+            Console.WriteLine("\n--- Search Results ---");
+            foreach (var r in records)
+            {
+                if (r.Name.ToLower().Contains(name))
+                {
+                    DisplayRecord(r);
+                    found = true;
+                }
+            }
+            if (!found)
+            {
+                Console.WriteLine("No Records Found");
+            }
         }
-        static void EditRecord()
+            static void EditRecord()
         {
 
         }
@@ -158,9 +173,8 @@ namespace StudentClinicRecordManager
         static void LoadRecords() 
         {
             if (!File.Exists("clinic_records.txt"))
-            {
-                Console.WriteLine("File does not exist.");
                 return;
+
                 string[] lines= File.ReadAllLines("clinic_records.txt");
                 foreach (var line in lines)
                 {
@@ -173,12 +187,11 @@ namespace StudentClinicRecordManager
                             Age = int.Parse (parts[1]),
                             Grade = parts[2],
                             Complaint = parts[3],
-                            Treatment = parts[4],
+                            Treatment = parts[4]
                         };
-
+                        records.Add(r);
                     }
                 }
-            }
         }
         static void DisplayRecord(StudentRecord r)
         {
