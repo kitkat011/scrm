@@ -115,12 +115,11 @@ namespace StudentClinicRecordManager
             {
                 Console.WriteLine("No Records Found");
                 return;
-
-                foreach (var r in records)
-                {
-                    DisplayRecord(r);
-                }
-
+            }
+            foreach (var r in records)
+            {
+                DisplayRecord(r);
+            }
             }
         }
         static void SearchRecord()
