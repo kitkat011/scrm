@@ -1,9 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.IO;
-using System.Xml.Linq;
+using System.Runtime.CompilerServices;
 
 namespace StudentClinicRecordManager
 {
@@ -20,52 +18,80 @@ namespace StudentClinicRecordManager
         static List<StudentRecord> records = new List<StudentRecord>();
         static void Main(string[] args)
         {
-            Console.WriteLine("Student Clinic Record Manager");
-            Console.WriteLine("1. Add Record");
-            Console.WriteLine("2. View All Records");
-            Console.WriteLine("3. Search Record by Name");
-            Console.WriteLine("4. Edit Record by Name");
-            Console.WriteLine("5. Delete Record by Name");
-            Console.WriteLine("6. Sort Records by Name");
-            Console.WriteLine("7. Filter Records by Name");
-            Console.WriteLine("8. Save Records to File");
-            Console.WriteLine("9. Exit");
-            Console.Write("Enter your choice: ");
-            String choice = Console.ReadLine();
+            LoadRecords();
 
-            switch (choice)
+            while (true)
             {
-                case "1":
-                    AddRecord();
-                    break;
-                case "2":
-                    ViewRecords();
-                    break;
-                case "3":
-                    SearchRecord();
-                    break;
-                case "4":
-                    EditRecord();
-                    break;
-                case "5":
-                    DeleteRecord();
-                    break;
-                case "6":
-                    SortRecordbyName();
-                    break;
-                case "7":
-                    FilterRecordsbyGrade();
-                    break;
-                case "8":
-                    SaveRecord();
-                    break;
-                case "9":
-                    SaveRecord();
-                    Console.WriteLine("Thank you!");
-                    return;
-                default:
-                    Console.WriteLine("Invalid Choice");
-                    break;
+                Console.BackgroundColor = ConsoleColor.Magenta;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("                                         STUDENT CLINIC RECORD MANAGER                                                 ");
+                Console.ResetColor();
+                //Console.BackgroundColor = ConsoleColor.White;
+                //Console.ForegroundColor = ConsoleColor.Black;
+
+
+                Console.WriteLine("                              +-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |1. Add Record                                    |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |2. View All Records                              |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |3. Search Record by Name                         |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |4. Edit Record by Name                           |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |5. Delete Record by Name                         |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |6. Sort Records by Name                          |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |7. Filter Records by Name                        |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |8. Save Records to File                          |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |9. Exit                                          |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("-------------------------------------------------–—---------------------------------------------------------------------");
+                Console.Write("Enter your choice:");
+                Console.WriteLine();
+                Console.ResetColor();
+                String choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        AddRecord();
+                        break;
+                    case "2":
+                        ViewRecords();
+                        break;
+                    case "3":
+                        SearchRecord();
+                        break;
+                    case "4":
+                        EditRecord();
+                        break;
+                    case "5":
+                        DeleteRecord();
+                        break;
+                    case "6":
+                        SortRecordbyName();
+                        break;
+                    case "7":
+                        FilterRecordsbyGrade();
+                        break;
+                    case "8":
+                        SaveRecord();
+                        break;
+                    case "9":
+                        SaveRecord();
+                        Console.WriteLine("Thank you!");
+                        return;
+                    default:
+                        Console.WriteLine("Invalid Choice");
+                        break;
+                }
             }
 
         }
@@ -80,19 +106,21 @@ namespace StudentClinicRecordManager
 
 
             records.Add(r);
-            Console.WriteLine("Record Added: ");
+            Console.WriteLine("Record Added Successfully!");
         }
         static void ViewRecords()
         {
-            Console.WriteLine("All Records");
-            if (records.Count > 0)
+            Console.WriteLine("\n--- All Records ---");
+            if (records.Count == 0)
             {
                 Console.WriteLine("No Records Found");
                 return;
-                foreach (var record in records)
+
+                foreach (var r in records)
                 {
-                    DisplayRecord(record);
+                    DisplayRecord(r);
                 }
+
             }
         }
         static void SearchRecord()
@@ -117,11 +145,47 @@ namespace StudentClinicRecordManager
         }
         static void SaveRecord()
         {
+            using (StreamWriter writer = new StreamWriter("clinic_records.txt"))
+            {
+                foreach (var r in records)
+                {
+                    writer.WriteLine($"{r.Name}, {r.Age}, {r.Grade}, {r.Complaint}, {r.Treatment}");
+                }
+            }
+            Console.WriteLine("Records saved to file");
 
+        }
+
+        static void LoadRecords() 
+        {
+            if (!File.Exists("clinic_records.txt"))
+            {
+                Console.WriteLine("File does not exist.");
+                return;
+                string[] lines= File.ReadAllLines("clinic_records.txt");
+                foreach (var line in lines)
+                {
+                    string[] parts = line.Split(',');
+                    if (parts.Length == 5) 
+                    {
+                        StudentRecord r = new StudentRecord
+                        {
+                            Name = parts[0],
+                            Age = int.Parse (parts[1]),
+                            Grade = parts[2],
+                            Complaint = parts[3],
+                            Treatment = parts[4],
+                        };
+
+                    }
+                }
+            }
         }
         static void DisplayRecord(StudentRecord r)
         {
-
+            Console.WriteLine ($"Name:{r.Name},Age:{r.Age}, Grade: {r.Grade}");
+            Console.WriteLine($"Complaint: {r.Complaint}");
+            Console.WriteLine($"Treatment: {r.Treatment}");
         }
     }
 }
