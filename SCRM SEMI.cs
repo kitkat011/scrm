@@ -61,30 +61,39 @@ namespace StudentClinicRecordManager
                 switch (choice)
                 {
                     case "1":
+                        Console.Clear();
                         AddRecord();
                         break;
                     case "2":
+                        Console.Clear();    
                         ViewRecords();
                         break;
                     case "3":
+                        Console.Clear();
                         SearchRecord();
                         break;
                     case "4":
+                        Console.Clear();
                         EditRecord();
                         break;
                     case "5":
+                        Console.Clear();
                         DeleteRecord();
                         break;
                     case "6":
+                        Console.Clear();
                         SortRecordbyName();
                         break;
                     case "7":
+                        Console.Clear();
                         FilterRecordsbyGrade();
                         break;
                     case "8":
+                        Console.Clear();
                         SaveRecord();
                         break;
                     case "9":
+                        Console.Clear();
                         SaveRecord();
                         Console.WriteLine("Thank you!");
                         return;
@@ -98,7 +107,7 @@ namespace StudentClinicRecordManager
         static void AddRecord()
         {
             StudentRecord r = new StudentRecord();
-            Console.WriteLine("Enter name: "); r.Name = Console.ReadLine();
+            Console.WriteLine("Enter full name: "); r.Name = Console.ReadLine();
             Console.WriteLine("Enter age: "); r.Age = int.Parse(Console.ReadLine());
             Console.WriteLine("Enter grade & course: "); r.Grade = Console.ReadLine();
             Console.WriteLine("Enter complaint: "); r.Complaint = Console.ReadLine();
@@ -107,6 +116,7 @@ namespace StudentClinicRecordManager
 
             records.Add(r);
             Console.WriteLine("Record Added Successfully!");
+            SaveRecord();
         }
         static void ViewRecords()
         {
@@ -172,6 +182,7 @@ namespace StudentClinicRecordManager
         {
             Console.WriteLine("Enter name to delete: ");
             string name = Console.ReadLine().ToLower();
+            bool found = false;
 
             for (int i = 0; i < records.Count; i++)
             {
@@ -181,20 +192,22 @@ namespace StudentClinicRecordManager
 
                     DisplayRecord(records[i]);
                     Console.WriteLine("Are you sure you want to delete this record? (yes/no)");
-                    if (Console.ReadLine().ToLower() == "yes")
+                    string choice = Console.ReadLine().ToLower();
+                    if (choice == "yes")
                     {
                         records.RemoveAt(i);
                         Console.WriteLine("Record Deleted Successfully!");
+                        found = true; i--;
                     }
-                    else if (Console.ReadLine().ToLower() == "no")
+                    else
                     {
                         Console.WriteLine("Deletion Cancelled.");
                     }
-                    else 
-                    { 
-                        Console.WriteLine("Invalid choice. Please try again.");
-                    }
                 }
+            }
+            if (!found)
+            {
+                Console.WriteLine("Records not found");
             }
         }
         static void SortRecordbyName()
@@ -214,7 +227,7 @@ namespace StudentClinicRecordManager
                     writer.WriteLine($"{r.Name}, {r.Age}, {r.Grade}, {r.Complaint}, {r.Treatment}");
                 }
             }
-            Console.WriteLine("Records saved to file");
+            Console.WriteLine("Record saved to file");
 
         }
 
