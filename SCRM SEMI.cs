@@ -212,7 +212,8 @@ namespace StudentClinicRecordManager
         }
         static void SortRecordbyName()
         {
-
+            records.Sort((a, b) => a.Name.CompareTo(b.Name));
+            Console.WriteLine("Records sorted by name");
         }
         static void FilterRecordsbyGrade()
         {
