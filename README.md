@@ -1,1 +1,266 @@
-# scrm
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+
+namespace StudentClinicRecordManager
+{
+    struct StudentRecord
+    {
+        public string Name;
+        public int Age;
+        public string Grade;
+        public string Complaint;
+        public string Treatment;
+    }
+    class Program
+    {
+        static List<StudentRecord> records = new List<StudentRecord>();
+        static void Main(string[] args)
+        {
+            LoadRecords();
+
+            while (true)
+            {
+                Console.BackgroundColor = ConsoleColor.Magenta;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("                                         STUDENT CLINIC RECORD MANAGER                                                 ");
+                Console.ResetColor();
+                //Console.BackgroundColor = ConsoleColor.White;
+                //Console.ForegroundColor = ConsoleColor.Black;
+
+
+                Console.WriteLine("                              +-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |1. Add Record                                    |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |2. View All Records                              |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |3. Search Record by Name                         |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |4. Edit Record by Name                           |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |5. Delete Record by Name                         |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |6. Sort Records by Name                          |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |7. Filter Records by Name                        |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |8. Save Records to File                          |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine("                              |9. Exit                                          |                                      ");
+                Console.WriteLine("                              |-------------------------------------------------+                                      ");
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("-------------------------------------------------–—---------------------------------------------------------------------");
+                Console.Write("Enter your choice:");
+                Console.WriteLine();
+                Console.ResetColor();
+                String choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        Console.Clear();
+                        AddRecord();
+                        break;
+                    case "2":
+                        Console.Clear();    
+                        ViewRecords();
+                        break;
+                    case "3":
+                        Console.Clear();
+                        SearchRecord();
+                        break;
+                    case "4":
+                        Console.Clear();
+                        EditRecord();
+                        break;
+                    case "5":
+                        Console.Clear();
+                        DeleteRecord();
+                        break;
+                    case "6":
+                        Console.Clear();
+                        SortRecordbyName();
+                        break;
+                    case "7":
+                        Console.Clear();
+                        FilterRecordsbyGrade();
+                        break;
+                    case "8":
+                        Console.Clear();
+                        SaveRecord();
+                        break;
+                    case "9":
+                        Console.Clear();
+                        SaveRecord();
+                        Console.WriteLine("Thank you!");
+                        return;
+                    default:
+                        Console.WriteLine("Invalid Choice");
+                        break;
+                }
+            }
+
+        }
+        static void AddRecord()
+        {
+            StudentRecord r = new StudentRecord();
+            Console.WriteLine("Enter full name: "); r.Name = Console.ReadLine();
+            Console.WriteLine("Enter age: "); r.Age = int.Parse(Console.ReadLine());
+            Console.WriteLine("Enter grade & course: "); r.Grade = Console.ReadLine();
+            Console.WriteLine("Enter complaint: "); r.Complaint = Console.ReadLine();
+            Console.WriteLine("Enter treatment: "); r.Treatment = Console.ReadLine();
+
+
+            records.Add(r);
+            Console.WriteLine("Record Added Successfully!");
+            SaveRecord();
+        }
+        static void ViewRecords()
+        {
+            Console.WriteLine("\n--- All Records ---");
+            if (records.Count == 0)
+            {
+                Console.WriteLine("No Records Found");
+                return;
+            }
+            foreach (var r in records)
+            {
+                DisplayRecord(r);
+            }
+        }
+        static void SearchRecord()
+        {
+            Console.WriteLine("Search Name: ");
+            string name = Console.ReadLine().ToLower();
+            bool found = false;
+
+            Console.WriteLine("\n--- Search Results ---");
+            foreach (var r in records)
+            {
+                if (r.Name.ToLower().Contains(name))
+                {
+                    DisplayRecord(r);
+                    found = true;
+                }
+            }
+            if (!found)
+            {
+                Console.WriteLine("No Records Found");
+            }
+        }
+        static void EditRecord()
+        {
+            Console.WriteLine("Enter name to edit: ");
+            string name = Console.ReadLine().ToLower();
+
+            for (int i = 0; i < records.Count; i++)
+            {
+                if (records[i].Name.ToLower().Contains(name))
+                {
+                    Console.WriteLine("Editing this record: ");
+                    DisplayRecord(records[i]);
+                    StudentRecord temp = records[i];
+                    Console.Write("Enter new name: ");
+                    temp.Name = Console.ReadLine();
+                    Console.Write("Enter new age: ");
+                    temp.Age = int.Parse(Console.ReadLine());
+                    Console.Write("Enter new grade & course: ");
+                    temp.Grade = Console.ReadLine();
+                    Console.Write("Enter new complaint: ");
+                    temp.Complaint = Console.ReadLine();
+                    Console.Write("Enter new treatment: ");
+                    temp.Treatment = Console.ReadLine();
+                    records[i] = temp;
+                }
+                Console.WriteLine("Updated Successfully!");
+            }
+        }
+        static void DeleteRecord()
+        {
+            Console.WriteLine("Enter name to delete: ");
+            string name = Console.ReadLine().ToLower();
+            bool found = false;
+
+            for (int i = 0; i < records.Count; i++)
+            {
+                if (records[i].Name.ToLower().Contains(name))
+                {
+                    Console.WriteLine("Deleting this record");
+
+                    DisplayRecord(records[i]);
+                    Console.WriteLine("Are you sure you want to delete this record? (yes/no)");
+                    string choice = Console.ReadLine().ToLower();
+                    if (choice == "yes")
+                    {
+                        records.RemoveAt(i);
+                        Console.WriteLine("Record Deleted Successfully!");
+                        found = true; i--;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Deletion Cancelled.");
+                    }
+                }
+            }
+            if (!found)
+            {
+                Console.WriteLine("Records not found");
+            }
+        }
+        static void SortRecordbyName()
+        {
+
+        }
+        static void FilterRecordsbyGrade()
+        {
+
+        }
+        static void SaveRecord()
+        {
+            using (StreamWriter writer = new StreamWriter("clinic_records.txt"))
+            {
+                foreach (var r in records)
+                {
+                    writer.WriteLine($"{r.Name}, {r.Age}, {r.Grade}, {r.Complaint}, {r.Treatment}");
+                }
+            }
+            Console.WriteLine("Record saved to file");
+
+        }
+
+        static void LoadRecords() 
+        {
+            if (!File.Exists("clinic_records.txt"))
+                return;
+
+                string[] lines= File.ReadAllLines("clinic_records.txt");
+                foreach (var line in lines)
+                {
+                    string[] parts = line.Split(',');
+                    if (parts.Length == 5) 
+                    {
+                        StudentRecord r = new StudentRecord
+                        {
+                            Name = parts[0],
+                            Age = int.Parse (parts[1]),
+                            Grade = parts[2],
+                            Complaint = parts[3],
+                            Treatment = parts[4]
+                        };
+                        records.Add(r);
+                    }
+                }
+        }
+        static void DisplayRecord(StudentRecord r)
+        {
+            Console.WriteLine($"Name: {r.Name}");
+            Console.WriteLine($"Age: {r.Age}");
+            Console.WriteLine($"Grade: {r.Grade}");
+            Console.WriteLine($"Complaint: {r.Complaint}");
+            Console.WriteLine($"Treatment: {r.Treatment}");
+        }
+    }
+}
