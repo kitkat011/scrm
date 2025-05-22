@@ -240,47 +240,58 @@ namespace StudentClinicRecordManager
         static void DeleteRecord()
         {
             Console.Clear();
-            
-            Console.WriteLine("enter 'x' to cancel");
-            Console.WriteLine("Enter name to delete: ");
-            string name = Console.ReadLine().ToLower();
-            bool found = false;
-            
-            if (name == "x")
-            {
-                return;
-            }
 
-            for (int i = 0; i < records.Count; i++)
-            {
-                if (records[i].Name.ToLower().Contains(name))
+            Console.Write("Enter name to delete: ");
+            string name = Console.ReadLine().ToLower();
+
+            
+                List<StudentRecord> matches = new List<StudentRecord>();
+                foreach (var r in records)
                 {
-                    Console.WriteLine("--- Delete this record ---");
-                    DisplayRecord(records[i]);
-                    Console.WriteLine("Are you sure you want to delete this record? (yes/no)");
-                    string choice = Console.ReadLine().ToLower();
-                    
-                    if (choice == "yes")
+                    if (r.Name.ToLower().Contains(name))
                     {
-                        records.RemoveAt(i);
-                        Console.WriteLine("Record Deleted Successfully!");
-                        found = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Deletion Cancelled.");
-                        return;
+                        matches.Add(r);
                     }
                 }
-            }
-            if (!found)
-            {
-                Console.WriteLine("Records not found");
-            }
-            Console.WriteLine("enter to exit.");
-            Console.ReadLine(); return;
+
+                if (matches.Count == 0)
+                {
+                    Console.WriteLine("No matching records found.");
+                    return;
+                }
+
+
+                Console.WriteLine("Matches found:");
+                for (int i = 0; i < matches.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {matches[i].Name}");
+                }
+
+                Console.Write("Enter number of record to delete: ");
+                int choice = int.Parse(Console.ReadLine());
+
+                if (choice < 1 || choice > matches.Count)
+                {
+                    Console.WriteLine("Invalid choice.");
+                    return;
+                }
+
+                StudentRecord selected = matches[choice - 1];
+                DisplayRecord(selected);
+
+                Console.Write("Are you sure you want to delete this record? (yes/no): ");
+                string confirm = Console.ReadLine().ToLower();
+
+                if (confirm == "yes")
+                {
+                    records.Remove(selected);
+                    Console.WriteLine("Record Deleted Successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("Deletion Cancelled.");
+                }
         }
-        
         static void SortRecordbyName()
         {
             Console.Clear();
