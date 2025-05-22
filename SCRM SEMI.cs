@@ -118,12 +118,12 @@ namespace StudentClinicRecordManager
                 Console.Write("Enter grade & course: "); r.Grade = Console.ReadLine();
                 Console.Write("Enter complaint: "); r.Complaint = Console.ReadLine();
                 Console.Write("Enter treatment: "); r.Treatment = Console.ReadLine();
-                Console.Write("Date visited: "); r.Date = (Console.ReadLine());
+                Console.Write("Date visited: "); r.Date = Console.ReadLine();
 
                 records.Add(r);
                 Console.WriteLine("\n Record Added Successfully!");
-            
                 SaveRecord();
+
             }
             
             Console.WriteLine("enter to exit.");
@@ -324,8 +324,6 @@ namespace StudentClinicRecordManager
         
         static void SaveRecord()
         {
-            Console.Clear();
-
             using (StreamWriter writer = new StreamWriter("clinic_records.txt"))
             {
                 foreach (var r in records)
