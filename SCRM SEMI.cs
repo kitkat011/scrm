@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 
 namespace StudentClinicRecordManager
@@ -12,6 +11,7 @@ namespace StudentClinicRecordManager
         public string Grade;
         public string Complaint;
         public string Treatment;
+        public string Date;
     }
     class Program
     {
@@ -100,8 +100,8 @@ namespace StudentClinicRecordManager
             {
                 Console.WriteLine("Add a new record? yes/no");
                 string add = Console.ReadLine().ToLower();
-                
-                if (add == "no")
+
+                if (add == "n" || add == "no")
                 {
                     break;
                 
@@ -118,7 +118,8 @@ namespace StudentClinicRecordManager
                 Console.Write("Enter grade & course: "); r.Grade = Console.ReadLine();
                 Console.Write("Enter complaint: "); r.Complaint = Console.ReadLine();
                 Console.Write("Enter treatment: "); r.Treatment = Console.ReadLine();
-            
+                Console.Write("Date visited: "); r.Date = (Console.ReadLine());
+
                 records.Add(r);
                 Console.WriteLine("\n Record Added Successfully!");
             
@@ -178,7 +179,7 @@ namespace StudentClinicRecordManager
                 Console.WriteLine("No Records Found");
             }
             
-            Console.WriteLine("enter 'x' to exit.");
+            Console.WriteLine("enter to exit.");
             Console.ReadLine(); return;
             
         }
@@ -190,7 +191,9 @@ namespace StudentClinicRecordManager
             Console.WriteLine("enter 'x' to exit.");
             Console.Write("Enter name to edit: ");
             string name = Console.ReadLine().ToLower();
-            
+
+            bool found = false;
+
             if (name == "x")
             {
                 return;
@@ -217,14 +220,21 @@ namespace StudentClinicRecordManager
                     temp.Treatment = Console.ReadLine();
                     
                     records[i] = temp;
-                    
+                    found = true;
+
                     Console.WriteLine("Updated successfully!");
 
                 }
+             
+            }
+            if (!found)
+            {
+                Console.WriteLine("No Records Found");
             }
             Console.WriteLine("enter to exit.");
             Console.ReadLine(); return;
-            
+
+
         }
         
         static void DeleteRecord()
@@ -314,11 +324,13 @@ namespace StudentClinicRecordManager
         
         static void SaveRecord()
         {
+            Console.Clear();
+
             using (StreamWriter writer = new StreamWriter("clinic_records.txt"))
             {
                 foreach (var r in records)
                 {
-                    writer.WriteLine($"{r.Name}, {r.Age}, {r.Grade}, {r.Complaint}, {r.Treatment}");
+                    writer.WriteLine($"{r.Name}, {r.Age}, {r.Grade}, {r.Complaint}, {r.Treatment}, {r.Date}");
                 }
             }
             Console.WriteLine("Record saved to file");
@@ -334,7 +346,7 @@ namespace StudentClinicRecordManager
             foreach (var line in lines)
             {
                 string[] parts = line.Split(',');
-                if (parts.Length == 5)
+                if (parts.Length == 6)
                 {
                     StudentRecord r = new StudentRecord
                     {
@@ -342,7 +354,8 @@ namespace StudentClinicRecordManager
                         Age = int.Parse(parts[1]),
                         Grade = parts[2].Trim(),
                         Complaint = parts[3].Trim(),
-                        Treatment = parts[4].Trim()
+                        Treatment = parts[4].Trim(),
+                        Date = parts[5].Trim()
                     };
                     records.Add(r);
                 }
@@ -354,7 +367,8 @@ namespace StudentClinicRecordManager
             Console.WriteLine($"Age: {r.Age}");
             Console.WriteLine($"Grade: {r.Grade}");
             Console.WriteLine($"Complaint: {r.Complaint}");
-            Console.WriteLine($"Treatment: {r.Treatment} \n");
+            Console.WriteLine($"Treatment: {r.Treatment}");
+            Console.WriteLine($"Date: {r.Date} \n");
         }
     }
 }
