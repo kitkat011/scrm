@@ -16,6 +16,10 @@ namespace StudentClinicRecordManager
     class Program
     {
         static List<StudentRecord> records = new List<StudentRecord>();
+
+        static string path = "C:\\Users\vivobook r5source\repos";
+        static string filePath = "clinic_records.txt";
+
         static void Main(string[] args)
         {
             LoadRecords();
@@ -104,15 +108,15 @@ namespace StudentClinicRecordManager
                 if (add == "n" || add == "no")
                 {
                     break;
-                
+
                 }
                 else if (add != "yes")
                 {
                     continue;
                 }
-            
+
                 StudentRecord r = new StudentRecord();
-            
+
                 Console.Write("Enter full name: "); r.Name = Console.ReadLine();
                 Console.Write("Enter age: "); r.Age = int.Parse(Console.ReadLine());
                 Console.Write("Enter grade & course: "); r.Grade = Console.ReadLine();
@@ -125,15 +129,15 @@ namespace StudentClinicRecordManager
                 SaveRecord();
 
             }
-            
+
             Console.WriteLine("enter to exit.");
             Console.ReadLine(); return;
         }
-        
+
         static void ViewRecords()
         {
             Console.Clear();
-            
+
             Console.WriteLine("--- All Records ---");
             if (records.Count == 0)
             {
@@ -146,23 +150,23 @@ namespace StudentClinicRecordManager
             }
             Console.WriteLine("enter to exit.");
             Console.ReadLine(); return;
-            
-            
+
+
         }
         static void SearchRecord()
         {
             Console.Clear();
-            
+
             Console.WriteLine("--- Search Record ---");
             Console.WriteLine("enter 'x' to exit.");
             Console.Write("Search name: ");
             string name = Console.ReadLine().ToLower();
-            
+
             if (name == "x")
             {
                 return;
             }
-            
+
             bool found = false;
 
             Console.WriteLine("\n--- Search Results ---");
@@ -178,15 +182,15 @@ namespace StudentClinicRecordManager
             {
                 Console.WriteLine("No Records Found");
             }
-            
+
             Console.WriteLine("enter to exit.");
             Console.ReadLine(); return;
-            
+
         }
         static void EditRecord()
         {
             Console.Clear();
-            
+
             Console.WriteLine("--- Edit Record ---");
             Console.WriteLine("enter 'x' to exit.");
             Console.Write("Enter name to edit: ");
@@ -205,9 +209,9 @@ namespace StudentClinicRecordManager
                 {
                     Console.WriteLine("Editing this record: ");
                     DisplayRecord(records[i]);
-                    
+
                     StudentRecord temp = records[i];
-                    
+
                     Console.Write("Enter new name: ");
                     temp.Name = Console.ReadLine();
                     Console.Write("Enter new age: ");
@@ -218,14 +222,14 @@ namespace StudentClinicRecordManager
                     temp.Complaint = Console.ReadLine();
                     Console.Write("Enter new treatment: ");
                     temp.Treatment = Console.ReadLine();
-                    
+
                     records[i] = temp;
                     found = true;
 
                     Console.WriteLine("Updated successfully!");
 
                 }
-             
+
             }
             if (!found)
             {
@@ -236,7 +240,7 @@ namespace StudentClinicRecordManager
 
 
         }
-        
+
         static void DeleteRecord()
         {
             Console.Clear();
@@ -244,98 +248,98 @@ namespace StudentClinicRecordManager
             Console.Write("Enter name to delete: ");
             string name = Console.ReadLine().ToLower();
 
-            
-                List<StudentRecord> matches = new List<StudentRecord>();
-                foreach (var r in records)
+
+            List<StudentRecord> matches = new List<StudentRecord>();
+            foreach (var r in records)
+            {
+                if (r.Name.ToLower().Contains(name))
                 {
-                    if (r.Name.ToLower().Contains(name))
-                    {
-                        matches.Add(r);
-                    }
+                    matches.Add(r);
                 }
+            }
 
-                if (matches.Count == 0)
-                {
-                    Console.WriteLine("No matching records found.");
-                    return;
-                }
+            if (matches.Count == 0)
+            {
+                Console.WriteLine("No matching records found.");
+                return;
+            }
 
 
-                Console.WriteLine("Matches found:");
-                for (int i = 0; i < matches.Count; i++)
-                {
-                    Console.WriteLine($"{i + 1}. {matches[i].Name}");
-                }
+            Console.WriteLine("Matches found:");
+            for (int i = 0; i < matches.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {matches[i].Name}");
+            }
 
-                Console.Write("Enter number of record to delete: ");
-                int choice = int.Parse(Console.ReadLine());
+            Console.Write("Enter number of record to delete: ");
+            int choice = int.Parse(Console.ReadLine());
 
-                if (choice < 1 || choice > matches.Count)
-                {
-                    Console.WriteLine("Invalid choice.");
-                    return;
-                }
+            if (choice < 1 || choice > matches.Count)
+            {
+                Console.WriteLine("Invalid choice.");
+                return;
+            }
 
-                StudentRecord selected = matches[choice - 1];
-                DisplayRecord(selected);
+            StudentRecord selected = matches[choice - 1];
+            DisplayRecord(selected);
 
-                Console.Write("Are you sure you want to delete this record? (yes/no): ");
-                string confirm = Console.ReadLine().ToLower();
+            Console.Write("Are you sure you want to delete this record? (yes/no): ");
+            string confirm = Console.ReadLine().ToLower();
 
-                if (confirm == "yes")
-                {
-                    records.Remove(selected);
-                    Console.WriteLine("Record Deleted Successfully!");
-                }
-                else
-                {
-                    Console.WriteLine("Deletion Cancelled.");
-                }
+            if (confirm == "yes")
+            {
+                records.Remove(selected);
+                Console.WriteLine("Record Deleted Successfully!");
+            }
+            else
+            {
+                Console.WriteLine("Deletion Cancelled.");
+            }
         }
         static void SortRecordbyName()
         {
             Console.Clear();
-            
+
             records.Sort((record1, record2) => record1.Name.CompareTo(record2.Name));
             Console.WriteLine("Sorted Records by Name:");
             ViewRecords();
-            
+
         }
-        
+
         static void FilterRecordsbyGrade()
         {
             Console.Clear();
-            
+
             Console.WriteLine("--- Filter by Grade & Course ---");
             Console.WriteLine("enter 'x' to cancel.");
             Console.WriteLine("Enter a grade/course: ");
             string grade = Console.ReadLine().ToLower();
-            
+
             if (grade == "x")
             {
                 return;
             }
-            
+
             bool found = false;
-            
+
             foreach (var r in records)
             {
-               if (r.Grade.ToLower().Contains(grade))
-               {
-                   DisplayRecord(r);
-                   found = true;
-               }
+                if (r.Grade.ToLower().Contains(grade))
+                {
+                    DisplayRecord(r);
+                    found = true;
+                }
             }
             if (!found)
-            Console.WriteLine("No records found for that grade or course.");
-            
+                Console.WriteLine("No records found for that grade or course.");
+
             Console.WriteLine("enter to exit.");
             Console.ReadLine(); return;
         }
-        
+
         static void SaveRecord()
         {
-            using (StreamWriter writer = new StreamWriter("clinic_records.txt"))
+            using (StreamWriter writer = new StreamWriter(filePath))
             {
                 foreach (var r in records)
                 {
@@ -348,10 +352,10 @@ namespace StudentClinicRecordManager
 
         static void LoadRecords()
         {
-            if (!File.Exists("clinic_records.txt"))
+            if (!File.Exists(filePath))
                 return;
 
-            string[] lines = File.ReadAllLines("clinic_records.txt");
+            string[] lines = File.ReadAllLines(filePath);
             foreach (var line in lines)
             {
                 string[] parts = line.Split(',');
