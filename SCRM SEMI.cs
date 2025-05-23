@@ -17,7 +17,7 @@ namespace StudentClinicRecordManager
     {
         static List<StudentRecord> records = new List<StudentRecord>();
 
-        static string path = "C:\\Users\vivobook r5source\repos";
+        string path = "C:\\Users\\vivobook r5\\source\\repos\\SCRM\\SCRM\\bin\\Debug\\net9.0\\clinic_records.txt";
         static string filePath = "clinic_records.txt";
 
         static void Main(string[] args)
