@@ -1,6 +1,6 @@
 # Student Clinic Record Manager (SCRM)
 
-This is our group project for programming 2. A simple **C# Console Application** for managing student clinic records. This system allows adding, viewing, searching, editing, deleting, sorting, and filtering student records. All records can also be saved to and loaded from a text file for persistence.
+This is our group project for programming. A simple **C# Console Application** for managing student clinic records. This system allows adding, viewing, searching, editing, deleting, sorting, and filtering student records. All records can also be saved to and loaded from a text file for persistence.
 
 ---
 
